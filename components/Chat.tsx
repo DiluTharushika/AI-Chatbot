@@ -117,7 +117,7 @@ export default function Chat() {
                initial={{ y: 20, opacity: 0 }}
                animate={{ y: 0, opacity: 1 }}
                transition={{ duration: 1, delay: 0.5, ease: "easeOut" }}
-               className="mt-12 text-5xl font-black tracking-tighter bg-gradient-to-r from-blue-500 to-cyan-300 bg-clip-text text-transparent drop-shadow-xl"
+               className="mt-8 md:mt-12 text-3xl sm:text-4xl md:text-5xl font-black tracking-tighter bg-gradient-to-r from-blue-500 to-cyan-300 bg-clip-text text-transparent drop-shadow-xl text-center px-4"
             >
               Welcome to MATCH AI
             </motion.h1>
@@ -125,7 +125,7 @@ export default function Chat() {
                initial={{ y: 20, opacity: 0 }}
                animate={{ y: 0, opacity: 1 }}
                transition={{ duration: 1, delay: 0.8, ease: "easeOut" }}
-               className="mt-4 text-xl font-medium text-[rgb(var(--text))]/80"
+               className="mt-4 text-lg md:text-xl font-medium text-[rgb(var(--text))]/80 text-center px-4"
             >
               Intelligence matched with precision
             </motion.p>
@@ -146,21 +146,21 @@ export default function Chat() {
             <div className="absolute -top-24 left-1/2 h-72 w-72 -translate-x-1/2 rounded-full bg-[rgb(var(--user))] blur-3xl" />
           </div>
 
-          <div className="mx-auto max-w-3xl px-4 py-8">
+          <div className="mx-auto max-w-3xl px-2 sm:px-4 py-4 md:py-8">
             {/* Header */}
         <motion.div 
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, ease: "easeOut" }}
-          className="mb-8 flex items-center justify-between"
+          className="mb-6 md:mb-8 flex flex-col md:flex-row items-center justify-between gap-4"
         >
-          <div className="flex items-center gap-4">
+          <div className="flex flex-col md:flex-row items-center gap-2 md:gap-4 text-center md:text-left">
             <BotAnimation isTyping={loading} size="md" />
             <div>
-              <h1 className="text-4xl font-black tracking-tighter bg-gradient-to-r from-white to-white/60 bg-clip-text text-transparent">
+              <h1 className="text-2xl sm:text-3xl md:text-4xl font-black tracking-tighter bg-gradient-to-r from-white to-white/60 bg-clip-text text-transparent">
                 MATCH AI
               </h1>
-              <p className="text-sm font-medium text-[rgb(var(--muted))]">
+              <p className="text-[10px] sm:text-xs md:text-sm font-medium text-[rgb(var(--muted))]">
                 Intelligence matched with precision
               </p>
             </div>
@@ -176,7 +176,7 @@ export default function Chat() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, ease: "easeOut", delay: 0.1 }}
-          className="glass rounded-3xl p-6 shadow-2xl"
+          className="glass rounded-2xl md:rounded-3xl p-3 sm:p-6 shadow-2xl"
         >
           {/* Messages */}
           <div
@@ -205,7 +205,7 @@ export default function Chat() {
                     )}
                     <div
                       className={[
-                        "max-w-[85%] rounded-2xl px-5 py-3 text-sm leading-relaxed whitespace-pre-wrap shadow-lg",
+                        "max-w-[90%] sm:max-w-[85%] rounded-2xl px-4 sm:px-5 py-2 sm:py-3 text-sm leading-relaxed whitespace-pre-wrap shadow-lg",
                         isUser
                           ? "bg-[rgb(var(--user))] text-white"
                           : "glass bg-white/5 text-[rgb(var(--botText))]",

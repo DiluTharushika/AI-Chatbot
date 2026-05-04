@@ -19,12 +19,29 @@ function TypingDots() {
 
 export default function Chat() {
   const [messages, setMessages] = useState<ChatMessage[]>([
-    { role: "system", content: "You are a helpful assistant." },
+    { role: "system", content: "You are an intelligent, professional AI assistant named MATCH AI." },
+    { role: "assistant", content: "Hello! Welcome to MATCH AI. How can I assist you today?" }
   ]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
+  const [showWelcome, setShowWelcome] = useState<boolean>(true);
+  const [mounted, setMounted] = useState<boolean>(false);
 
   const listRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    setMounted(true);
+    const hasVisited = sessionStorage.getItem("hasVisitedMatchAI");
+    if (hasVisited === "true") {
+      setShowWelcome(false);
+    } else {
+      sessionStorage.setItem("hasVisitedMatchAI", "true");
+      const timer = setTimeout(() => {
+        setShowWelcome(false);
+      }, 3500);
+      return () => clearTimeout(timer);
+    }
+  }, []);
 
   const visibleMessages = useMemo(
     () => messages.filter((m) => m.role !== "system"),
@@ -74,15 +91,63 @@ export default function Chat() {
     }
   }
 
-  return (
-    <div className="min-h-screen bg-[rgb(var(--bg))] text-[rgb(var(--text))]">
-      {/* subtle background glow */}
-      <div className="pointer-events-none fixed inset-0 opacity-30">
-        <div className="absolute -top-24 left-1/2 h-72 w-72 -translate-x-1/2 rounded-full bg-[rgb(var(--user))] blur-3xl" />
-      </div>
+  if (!mounted) return null; // Prevent hydration UI mismatch
 
-      <div className="mx-auto max-w-3xl px-4 py-8">
-        {/* Header */}
+  return (
+    <div className="min-h-screen bg-[rgb(var(--bg))] text-[rgb(var(--text))] overflow-hidden relative">
+      
+      {/* Welcome Screen Overlay */}
+      <AnimatePresence>
+        {showWelcome && (
+          <motion.div
+            key="welcome-screen"
+            initial={{ opacity: 1 }}
+            exit={{ opacity: 0, scale: 1.05, filter: "blur(10px)" }}
+            transition={{ duration: 0.8, ease: "easeInOut" }}
+            className="absolute inset-0 z-50 flex flex-col items-center justify-center bg-[rgb(var(--bg))] backdrop-blur-2xl"
+          >
+            <motion.div 
+               initial={{ scale: 0.5, opacity: 0 }}
+               animate={{ scale: 1, opacity: 1 }}
+               transition={{ duration: 1, ease: "easeOut" }}
+            >
+               <BotAnimation size="lg" />
+            </motion.div>
+            <motion.h1 
+               initial={{ y: 20, opacity: 0 }}
+               animate={{ y: 0, opacity: 1 }}
+               transition={{ duration: 1, delay: 0.5, ease: "easeOut" }}
+               className="mt-12 text-5xl font-black tracking-tighter bg-gradient-to-r from-blue-500 to-cyan-300 bg-clip-text text-transparent drop-shadow-xl"
+            >
+              Welcome to MATCH AI
+            </motion.h1>
+            <motion.p 
+               initial={{ y: 20, opacity: 0 }}
+               animate={{ y: 0, opacity: 1 }}
+               transition={{ duration: 1, delay: 0.8, ease: "easeOut" }}
+               className="mt-4 text-xl font-medium text-[rgb(var(--text))]/80"
+            >
+              Intelligence matched with precision
+            </motion.p>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Main Application */}
+      {!showWelcome && (
+        <motion.div 
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.8, delay: 0.2 }}
+          className="absolute inset-0 overflow-y-auto"
+        >
+          {/* subtle background glow */}
+          <div className="pointer-events-none fixed inset-0 opacity-30">
+            <div className="absolute -top-24 left-1/2 h-72 w-72 -translate-x-1/2 rounded-full bg-[rgb(var(--user))] blur-3xl" />
+          </div>
+
+          <div className="mx-auto max-w-3xl px-4 py-8">
+            {/* Header */}
         <motion.div 
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -189,11 +254,13 @@ export default function Chat() {
             </button>
           </div>
 
-          <p className="mt-3 text-xs text-[rgb(var(--muted))]">
-            Tip: press Enter to send • Change theme from the top right.
-          </p>
+              <p className="mt-3 text-xs text-[rgb(var(--muted))]">
+                Tip: press Enter to send • Change theme from the top right.
+              </p>
+            </motion.div>
+          </div>
         </motion.div>
-      </div>
+      )}
     </div>
   );
 }
